@@ -11,7 +11,7 @@ namespace marioProgetto.Models
 
         public Make()
         {
-            Models= new Collection<Model>()
+            Models= new Collection<Model>();
         }
     }
 }
