@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
+using marioProgetto.Controllers.Resource;
 using marioProgetto.Models;
 using marioProgetto.Persistence;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +12,19 @@ namespace marioProgetto.Controllers
     public class MakesController : Controller
     {
         private readonly MarioProgettoDbContext _dbContext;
-        public MakesController(MarioProgettoDbContext _db)
+        private readonly IMapper _mapper;
+        public MakesController(MarioProgettoDbContext _db,IMapper map)
         {
             _dbContext = _db;
+            _mapper=map;
         }
 
         [HttpGet("/api/makes")]
-        public async Task<IEnumerable<Make>> GetMakes()
+        public async Task<IEnumerable<MakeResource>> GetMakes()
         {
-            return await _dbContext.Makes.Include(m => m.Models).ToListAsync();
+            var makes = await _dbContext.Makes.Include(m => m.Models).ToListAsync();
+
+            return _mapper.Map<List<Make>,List<MakeResource>>(makes);
         }
 
         
