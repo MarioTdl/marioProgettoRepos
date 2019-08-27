@@ -1,3 +1,4 @@
+import { MakeService } from './services/make.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -31,7 +32,9 @@ import { VeichleFormComponent } from './veichle/veichle-form.component';
       { path: 'veichle/new', component: VeichleFormComponent },
     ])
   ],
-  providers: [],
+  providers: [
+    MakeService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

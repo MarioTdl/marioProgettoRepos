@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { MakeService } from './../services/make.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-veichle-form',
@@ -6,5 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./veichle-form.component.css']
 })
 
-export class VeichleFormComponent {
+export class VeichleFormComponent implements OnInit {
+  makes;
+  constructor(private makeService: MakeService) { }
+
+  ngOnInit() {
+    this.makeService.getMakes().subscribe(res => {
+      this.makes = res;
+
+    });
+  };
 }
+
