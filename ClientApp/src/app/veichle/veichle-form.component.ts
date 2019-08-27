@@ -1,3 +1,4 @@
+import { ModelService } from './../services/model.service';
 import { Model } from './../model/model';
 import { Makes } from './../model/makes';
 import { MakeService } from './../services/make.service';
@@ -12,9 +13,10 @@ import { Component, OnInit } from '@angular/core';
 export class VeichleFormComponent implements OnInit {
   makes: Makes[];
   models: Model[];
-  modelsId:number;
+  modelsEmptyFake: Model[];
+  modelsId: number;
 
-  constructor(private makeService: MakeService) { }
+  constructor(private makeService: MakeService, private modelService: ModelService) { }
 
   ngOnInit() {
     this.makeService.getMakes().subscribe(res => {
@@ -23,10 +25,10 @@ export class VeichleFormComponent implements OnInit {
   }
 
   onMakeChange() {
-    this.makeService.getModelMakes(this.modelsId).subscribe(res => {
+    this.models = this.modelsEmptyFake;
+    this.modelService.getModelMakes(this.modelsId).subscribe(res => {
       this.models = res;
     });
-
   }
 }
 
