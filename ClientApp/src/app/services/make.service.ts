@@ -6,11 +6,13 @@ import { Injectable } from '@angular/core';
 })
 export class MakeService {
 
-  makes;
-
   constructor(private http: HttpClient) { }
 
   getMakes() {
     return this.http.get<any>('/api/makes');
+  }
+
+  getModelMakes(id: number) {
+    return this.http.get<any>('/api/model/' + id);
   }
 }

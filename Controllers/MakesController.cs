@@ -23,10 +23,9 @@ namespace marioProgetto.Controllers
         public async Task<IEnumerable<MakeResource>> GetMakes()
         {
             var makes = await _dbContext.Makes.Include(m => m.Models).ToListAsync();
-
+            
             return _mapper.Map<List<Make>,List<MakeResource>>(makes);
         }
-
-        
+  
     }
 }
