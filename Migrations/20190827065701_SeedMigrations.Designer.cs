@@ -9,8 +9,8 @@ using marioProgetto.Persistence;
 namespace marioProgetto.Migrations
 {
     [DbContext(typeof(MarioProgettoDbContext))]
-    [Migration("20190826155738_InitialModel")]
-    partial class InitialModel
+    [Migration("20190827065701_SeedMigrations")]
+    partial class SeedMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,7 +26,9 @@ namespace marioProgetto.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
@@ -41,13 +43,15 @@ namespace marioProgetto.Migrations
 
                     b.Property<int>("MakeId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     b.HasKey("Id");
 
                     b.HasIndex("MakeId");
 
-                    b.ToTable("Model");
+                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("marioProgetto.Models.Model", b =>
