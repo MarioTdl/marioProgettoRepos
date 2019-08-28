@@ -34,7 +34,7 @@ namespace marioProgetto
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MarioProgettoDbContext db)
         {
             if (env.IsDevelopment())
             {
@@ -50,7 +50,7 @@ namespace marioProgetto
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            db.Database.Migrate();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
