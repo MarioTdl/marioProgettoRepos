@@ -15,6 +15,7 @@ namespace marioProgetto.Automapper
         {
             //mapping domain to api resource
             CreateMap<Make, MakeResource>();
+             CreateMap<Make, KeyValuePairResource>();
             CreateMap<Model, KeyValuePairResource>();
             CreateMap<Feature, KeyValuePairResource>();
             CreateMap<Veichle, SaveVehicleResource>()

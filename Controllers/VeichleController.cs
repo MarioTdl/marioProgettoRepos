@@ -14,27 +14,22 @@ namespace marioProgetto.Controllers
     {
         private readonly IMapper _mapper;
         private readonly MarioProgettoDbContext _context;
-        public VeichleController(IMapper mapper, MarioProgettoDbContext db)
+        private readonly IVehicleRepository _repository;
+        public VeichleController(IMapper mapper, MarioProgettoDbContext db, IVehicleRepository repository)
         {
             _mapper = mapper;
             _context = db;
+            _repository = repository;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var vehicle = await _context.Veichles
-            .Include(v => v.Features)
-            .ThenInclude(vf=>vf.Feature)
-            .Include(i=>i.Model)
-            .ThenInclude(m=>m.Make)
-            .SingleOrDefaultAsync(p => p.Id == id);
-
+            var vehicle = await _repository.GetVeichle(id);
             if (vehicle == null)
                 return NotFound();
 
             var veichleResource = _mapper.Map<Veichle, VeichleResource>(vehicle);
-
 
             return Ok(veichleResource);
         }
@@ -59,7 +54,9 @@ namespace marioProgetto.Controllers
             _context.Veichles.Add(veichle);
             await _context.SaveChangesAsync();
 
-            var resourceCreate = _mapper.Map<Veichle, SaveVehicleResource>(veichle);
+            veichle = await _repository.GetVeichle(veichle.Id);
+
+            var resourceCreate = _mapper.Map<Veichle, VeichleResource>(veichle);
 
             return Ok(resourceCreate);
         }
@@ -70,7 +67,7 @@ namespace marioProgetto.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var veichle = await _context.Veichles.Include(v => v.Features).SingleOrDefaultAsync(v => v.Id == id);
+            var veichle = await _repository.GetVeichle(id);
 
             if (veichle == null)
                 return NotFound();
@@ -80,7 +77,7 @@ namespace marioProgetto.Controllers
 
             await _context.SaveChangesAsync();
 
-            var resourceCreate = _mapper.Map<Veichle, SaveVehicleResource>(veichle);
+            var resourceCreate = _mapper.Map<Veichle, VeichleResource>(veichle);
 
             return Ok(resourceCreate);
         }
