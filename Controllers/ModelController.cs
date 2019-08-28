@@ -22,13 +22,13 @@ namespace marioProgetto.Controllers
         }
 
         [HttpGet("/api/model/{id}")]
-        public async Task<IEnumerable<ModelResource>> GetMakes([FromRoute]int id)
+        public async Task<IEnumerable<KeyValuePairResource>> GetMakes([FromRoute]int id)
         {
             Make makeFakeId = _dbContext.Makes.Where(x=>x.Id==id).FirstOrDefault();
             int makeId= makeFakeId.Id;
             var model= await _dbContext.Models.Where(x=>x.MakeId==makeId).ToListAsync();
                     
-            return _mapper.Map<List<Model>,List<ModelResource>>(model);
+            return _mapper.Map<List<Model>,List<KeyValuePairResource>>(model);
         }
     
         

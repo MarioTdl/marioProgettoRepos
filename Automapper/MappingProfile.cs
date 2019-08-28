@@ -15,16 +15,23 @@ namespace marioProgetto.Automapper
         {
             //mapping domain to api resource
             CreateMap<Make, MakeResource>();
-            CreateMap<Model, ModelResource>();
-            CreateMap<Feature, FeatureResource>();
-            CreateMap<Veichle, VehicleResource>()
+            CreateMap<Model, KeyValuePairResource>();
+            CreateMap<Feature, KeyValuePairResource>();
+            CreateMap<Veichle, SaveVehicleResource>()
             .ForMember(vr => vr.Contact,
             opt => opt.MapFrom(v =>
             new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
             .ForMember(v => v.Features, opt => opt.MapFrom(v => v.Features.Select(p => p.FeatureId)));
+            CreateMap<Veichle, VeichleResource>()
+            .ForMember(vr=> vr.Make,opt=> opt.MapFrom(v=>v.Model.Make))
+            .ForMember(vr => vr.Contact,
+            opt => opt.MapFrom(v =>
+            new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
+            .ForMember(v => v.Features, opt => opt.MapFrom(v => v.Features.Select(p => new KeyValuePairResource{Id=p.Feature.Id,Name=p.Feature.Name})));
+
 
             //mapping api resource to domain
-            CreateMap<VehicleResource, Veichle>()
+            CreateMap<SaveVehicleResource, Veichle>()
             .ForMember(v => v.Id, opt => opt.Ignore())
             .ForMember(v => v.ContactName, opt => opt.MapFrom(v => v.Contact.Name))
             .ForMember(v => v.ContactEmail, opt => opt.MapFrom(v => v.Contact.Email))

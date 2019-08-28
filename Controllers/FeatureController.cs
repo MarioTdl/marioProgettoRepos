@@ -20,11 +20,11 @@ namespace marioProgetto.Controllers
         }
 
         [HttpGet("/api/features")]
-        public async Task<IEnumerable<FeatureResource>> GetFeature()
+        public async Task<IEnumerable<KeyValuePairResource>> GetFeature()
         {
             var features = await _dbContext.Features.ToListAsync();
             
-            return _mapper.Map<List<Feature>,List<FeatureResource>>(features);
+            return _mapper.Map<List<Feature>,List<KeyValuePairResource>>(features);
         }
         
     }
