@@ -1,8 +1,10 @@
+import { Feature } from './../model/feature';
+import { FeaturesService } from './../services/features.service';
 import { ModelService } from './../services/model.service';
 import { Model } from './../model/model';
-import { Makes } from './../model/makes';
 import { MakeService } from './../services/make.service';
 import { Component, OnInit } from '@angular/core';
+import { Make } from '../model/makes';
 
 @Component({
   selector: 'app-veichle-form',
@@ -11,17 +13,25 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class VeichleFormComponent implements OnInit {
-  makes: Makes[];
+  makes: Make[];
   models: Model[];
   modelsEmptyFake: Model[];
+  features: Feature[];
   modelsId: number;
 
-  constructor(private makeService: MakeService, private modelService: ModelService) { }
+  constructor(private makeService: MakeService,
+    private modelService: ModelService,
+    private feauterService: FeaturesService) { }
 
   ngOnInit() {
     this.makeService.getMakes().subscribe(res => {
       this.makes = res;
     });
+
+    this.feauterService.getFeatures().subscribe(res => {
+       this.features = res;
+       console.log(res);
+      });
   }
 
   onMakeChange() {

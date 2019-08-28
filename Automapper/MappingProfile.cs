@@ -10,6 +10,7 @@ namespace marioProgetto.Automapper
         {
             CreateMap<Make,MakeResource>();
             CreateMap<Model,ModelResource>();
+            CreateMap<Feature,FeatureResource>();
          }
     }
 }
