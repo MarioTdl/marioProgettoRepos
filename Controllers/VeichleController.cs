@@ -61,5 +61,15 @@ namespace marioProgetto.Controllers
 
             return Ok(resourceCreate);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteVehicle(int id)
+        {
+            var vehicle=await _context.Veichles.FindAsync(id);
+            _context.Remove(vehicle);
+            await _context.SaveChangesAsync();
+
+            return Ok(id);
+        }
     }
 }
