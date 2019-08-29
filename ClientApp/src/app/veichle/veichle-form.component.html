@@ -20,19 +20,20 @@
   </div>
   <p>Is this veichle registred?</p>
     <label for="registred"class="radio-inline">
-    <input type="radio" name="isRegistred" id="registred" value="true" [(ngModel)]="veichle.isRegistred" /> Yes
+    <input type="radio" name="isRegistred" id="registred" [value]="true" [(ngModel)]="veichle.isRegistred" /> Yes
   </label>
       <label for="notRegistred" class="radio-inline">
-      <input type="radio" name="isRegistred" id="notRegistred" value="false" [(ngModel)]="veichle.isRegistred" > No
+      <input type="radio" name="isRegistred" id="notRegistred" [value]="false" [(ngModel)]="veichle.isRegistred" > No
     </label>
   <h2>Features</h2>
   <div *ngFor="let f of features" class="checkbox">
       <label for="feature{{f.id}}">
-        <input type="checkbox" id="feature{{f.id}}"  (change)="onFeatureToggle(f.id,$event)" >{{f.name}}</label>
+        <input type="checkbox" id="feature{{f.id}}"  (change)="onFeatureToggle(f.id,$event)" [checked]="veichle.features.includes(f.id)">{{f.name}}</label>
     </div>
   <h2>Contact</h2>
   <div class="form-group"><label for="contactName">Name</label><input id="contactName" type="text" class="form-contol" [(ngModel)]="veichle.contact.name" name="contactName"></div>
   <div class="form-group"><label for="contactPhone">Phone</label><input id="contactPhone" type="text" class="form-contol" [(ngModel)]="veichle.contact.phone" name="contactPhone"></div>
   <div class="form-group"><label for="contactEmail">Email</label><input id="contactEmail" type="text" class="form-contol" [(ngModel)]="veichle.contact.email" name="contactEmail"></div>
   <button class="btn btn-primary" [disabled]="!f.valid">Save</button>
+  <button  *ngIf="veichle.id" class="btn btn-danger" type="submit" (click)="delete()">Delete</button>
 </form>

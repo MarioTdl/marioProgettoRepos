@@ -72,6 +72,7 @@ export class VeichleFormComponent implements OnInit {
   }
 
   private setVeichle(v: Veichle) {
+    console.log(v);
     this.veichle.id = v.id;
     this.veichle.makeId = v.make.id;
     this.veichle.modelId = v.model.id;
@@ -86,6 +87,7 @@ export class VeichleFormComponent implements OnInit {
       this.models = res;
     });
   }
+
   onFeatureToggle(feautureId, $event) {
     if ($event.target.checked) {
       this.veichle.features.push(feautureId);
@@ -96,8 +98,16 @@ export class VeichleFormComponent implements OnInit {
   }
 
   submit() {
+    if (this.veichle.id) {
+      this.veichleService.update(this.veichle).subscribe(x => console.log(x));
+    }
     this.veichleService.create(this.veichle)
       .subscribe(x => console.log(x));
+  }
+  delete() {
+    if (confirm('Sei sicuro?')) {
+      this.veichleService.delete(this.veichle.id).subscribe(x => { this.router.navigate(['']); });
+    }
   }
 }
 
