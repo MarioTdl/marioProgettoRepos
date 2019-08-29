@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using marioProgetto.Models;
 
-namespace marioProgetto.Persistence
+namespace marioProgetto.Core
 {
     public interface IVehicleRepository
     {

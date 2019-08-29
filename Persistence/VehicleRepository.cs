@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using marioProgetto.Core;
 using marioProgetto.Models;
 using Microsoft.EntityFrameworkCore;
 

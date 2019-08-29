@@ -2,10 +2,9 @@ using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using marioProgetto.Controllers.Resource;
+using marioProgetto.Core;
 using marioProgetto.Models;
-using marioProgetto.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace marioProgetto.Controllers
 {
@@ -78,6 +77,7 @@ namespace marioProgetto.Controllers
 
             await _unitOfWork.CompleteAsync();
 
+            veichle = await _repository.GetVeichle(veichle.Id);
             var resourceCreate = _mapper.Map<Veichle, VeichleResource>(veichle);
 
             return Ok(resourceCreate);

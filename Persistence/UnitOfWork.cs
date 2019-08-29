@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using marioProgetto.Core;
 
 namespace marioProgetto.Persistence
 {

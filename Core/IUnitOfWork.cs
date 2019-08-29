@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace marioProgetto.Persistence
+namespace marioProgetto.Core
 {
     public interface IUnitOfWork
     {
