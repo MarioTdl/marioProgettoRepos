@@ -13,13 +13,14 @@ namespace marioProgetto.Controllers
     public class VeichleController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly MarioProgettoDbContext _context;
         private readonly IVehicleRepository _repository;
-        public VeichleController(IMapper mapper, MarioProgettoDbContext db, IVehicleRepository repository)
+        private readonly IUnitOfWork _unitOfWork;
+        public VeichleController(IMapper mapper,
+         IVehicleRepository repository, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _context = db;
             _repository = repository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet("{id}")]
@@ -51,8 +52,8 @@ namespace marioProgetto.Controllers
             var veichle = _mapper.Map<SaveVehicleResource, Veichle>(veichleResource);
             veichle.LastUpdate = DateTime.Now;
 
-            _context.Veichles.Add(veichle);
-            await _context.SaveChangesAsync();
+            _repository.Add(veichle);
+            await _unitOfWork.CompleteAsync();
 
             veichle = await _repository.GetVeichle(veichle.Id);
 
@@ -75,7 +76,7 @@ namespace marioProgetto.Controllers
             _mapper.Map<SaveVehicleResource, Veichle>(veichleResource, veichle);
             veichle.LastUpdate = DateTime.Now;
 
-            await _context.SaveChangesAsync();
+            await _unitOfWork.CompleteAsync();
 
             var resourceCreate = _mapper.Map<Veichle, VeichleResource>(veichle);
 
@@ -85,13 +86,13 @@ namespace marioProgetto.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var vehicle = await _context.Veichles.FindAsync(id);
+            var vehicle = await _repository.GetVeichle(id, includeResource: false);
 
             if (vehicle == null)
                 return NotFound();
 
-            _context.Remove(vehicle);
-            await _context.SaveChangesAsync();
+            _repository.Remove(vehicle);
+            await _unitOfWork.CompleteAsync();
 
             return Ok(id);
         }
