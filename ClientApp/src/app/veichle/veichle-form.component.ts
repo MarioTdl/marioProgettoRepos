@@ -17,11 +17,21 @@ export class VeichleFormComponent implements OnInit {
   models: Model[];
   modelsEmptyFake: Model[];
   features: Feature[];
-  modelsId: number;
+  makeId: number;
+  modelId: number;
+  isRegistred: Boolean;
+  veichle: any = {
+    features: [],
+    contact: {
+    }
+  };
+
+
 
   constructor(private makeService: MakeService,
     private modelService: ModelService,
-    private feauterService: FeaturesService) { }
+    private feauterService: FeaturesService
+    ) { }
 
   ngOnInit() {
     this.makeService.getMakes().subscribe(res => {
@@ -29,16 +39,30 @@ export class VeichleFormComponent implements OnInit {
     });
 
     this.feauterService.getFeatures().subscribe(res => {
-       this.features = res;
-       console.log(res);
-      });
+      this.features = res;
+    });
   }
 
   onMakeChange() {
     this.models = this.modelsEmptyFake;
-    this.modelService.getModelMakes(this.modelsId).subscribe(res => {
+    this.modelService.getModelMakes(this.makeId).subscribe(res => {
       this.models = res;
     });
+  }
+  onFeatureToggle(feautureId, $event) {
+    if ($event.target.checked) {
+      this.veichle.features.push(feautureId);
+    } else {
+      const index = this.veichle.features.indexOf(feautureId);
+      this.veichle.features.splice(index, 1);
+    }
+  }
+  submit() {
+    this.makeService.create(this.veichle)
+      .subscribe(x => console.log(x),
+        err => {
+
+        });
   }
 }
 

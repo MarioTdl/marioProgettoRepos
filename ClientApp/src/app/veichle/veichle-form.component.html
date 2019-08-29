@@ -1,34 +1,38 @@
 <h1>New Veichle</h1>
-<form action="">
+<p>
+  {{veichle| json}}
+</p>
+<form #f="ngForm" (ngSubmit)="submit()">
   <div class="form-group">
     <label for="make">Make</label>
-    <select id="make" class="form-control" (change)="onMakeChange()" [(ngModel)]="modelsId" name="modelsId">
+    <select id="make" class="form-control" (change)="onMakeChange()" [(ngModel)]="makeId" name="makeId" required #make="ngModel">
       <option value=""></option>
       <option *ngFor="let m of makes" value="{{m.id}}">{{m.name}}</option>
     </select>
   </div>
   <div class="form-group">
     <label for="model">Model</label>
-    <select id="model" class="form-control">
+    <select id="model" class="form-control"  [(ngModel)]="modelId" name="modelId">
         <option value=""></option>
         <option *ngFor="let m of models" value="{{m.id}}">{{m.name}}</option>
     </select>
+    <div class="alert alert-danger" *ngIf="make.touched && !make.valid">Please specify the make</div>
   </div>
   <p>Is this veichle registred?</p>
     <label for="registred"class="radio-inline">
-    <input type="radio" name="isRegistred" id="registred" value="true"> Yes
+    <input type="radio" name="isRegistred" id="registred" value="true" [(ngModel)]="isRegistred" /> Yes
   </label>
       <label for="notRegistred" class="radio-inline">
-      <input type="radio" name="isRegistred" id="notRegistred" value="false"> No
+      <input type="radio" name="isRegistred" id="notRegistred" value="false" [(ngModel)]="isRegistred" > No
     </label>
   <h2>Features</h2>
   <div *ngFor="let f of features" class="checkbox">
       <label for="feature{{f.id}}">
-        <input type="checkbox" id="feature{{f.id}}">{{f.name}}</label>
+        <input type="checkbox" id="feature{{f.id}}"  (change)="onFeatureToggle(f.id,$event)" >{{f.name}}</label>
     </div>
   <h2>Contact</h2>
-  <div class="form-group"><label for="contactName">Name</label><input id="contactName" type="text" class="form-contol"></div>
-  <div class="form-group"><label for="contactPhone">Phone</label><input id="contactPhone" type="text" class="form-contol"></div>
-  <div class="form-group"><label for="contactEmail">Email</label><input id="contactEmail" type="text" class="form-contol"></div>
-  <button class="btn btn-primary">Save</button>
+  <div class="form-group"><label for="contactName">Name</label><input id="contactName" type="text" class="form-contol" [(ngModel)]="veichle.contact.name" name="contactName"></div>
+  <div class="form-group"><label for="contactPhone">Phone</label><input id="contactPhone" type="text" class="form-contol" [(ngModel)]="veichle.contact.phone" name="contactPhone"></div>
+  <div class="form-group"><label for="contactEmail">Email</label><input id="contactEmail" type="text" class="form-contol" [(ngModel)]="veichle.contact.email" name="contactEmail"></div>
+  <button class="btn btn-primary" [disabled]="!f.valid">Save</button>
 </form>

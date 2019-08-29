@@ -12,4 +12,7 @@ export class MakeService {
   getMakes() {
     return this.http.get<Make[]>('/api/makes');
   }
+  create(veichle) {
+    return this.http.post('/api/vehicles', veichle);
+  }
 }
