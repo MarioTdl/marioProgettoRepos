@@ -20,11 +20,11 @@ namespace marioProgetto.Controllers
         }
 
         [HttpGet("/api/makes")]
-        public async Task<IEnumerable<MakeResource>> GetMakes()
+        public async Task<IEnumerable<KeyValuePairResource>> GetMakes()
         {
             var makes = await _dbContext.Makes.Include(m => m.Models).ToListAsync();
             
-            return _mapper.Map<List<Make>,List<MakeResource>>(makes);
+            return _mapper.Map<List<Make>,List<KeyValuePairResource>>(makes);
         }
   
     }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Make } from '../model/makes';
+import { KeyValuePair } from '../model/KeyValuePair';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,6 @@ export class MakeService {
   constructor(private http: HttpClient) { }
 
   getMakes() {
-    return this.http.get<Make[]>('/api/makes');
-  }
-  create(veichle) {
-    return this.http.post('/api/vehicles', veichle);
+    return this.http.get<KeyValuePair[]>('/api/makes');
   }
 }

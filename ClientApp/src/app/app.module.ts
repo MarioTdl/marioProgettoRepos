@@ -12,6 +12,10 @@ import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { VeichleFormComponent } from './veichle/veichle-form.component';
+import { ModelService } from './services/model.service';
+import { FeaturesService } from './services/features.service';
+import { AppErroHandler } from './app-error-handler';
+import { VeichleService } from './services/veichle.service';
 
 @NgModule({
   declarations: [
@@ -31,10 +35,15 @@ import { VeichleFormComponent } from './veichle/veichle-form.component';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'veichle/new', component: VeichleFormComponent },
+      { path: 'veichle/:id', component: VeichleFormComponent },
     ])
   ],
   providers: [
-    MakeService
+    MakeService,
+    ModelService,
+    FeaturesService,
+    VeichleService,
+    { provide: ErrorEvent, useClass: AppErroHandler }
   ],
   bootstrap: [AppComponent]
 })

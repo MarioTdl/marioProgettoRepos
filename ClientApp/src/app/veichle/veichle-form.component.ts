@@ -1,10 +1,13 @@
-import { Feature } from './../model/feature';
+import * as _ from 'lodash';
+import { Veichle } from './../model/Vehicle';
+import { SaveVeichle } from './../model/SaveVeichle';
 import { FeaturesService } from './../services/features.service';
 import { ModelService } from './../services/model.service';
-import { Model } from './../model/model';
 import { MakeService } from './../services/make.service';
 import { Component, OnInit } from '@angular/core';
-import { Make } from '../model/makes';
+import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
+import { VeichleService } from '../services/veichle.service';
 
 @Component({
   selector: 'app-veichle-form',
@@ -13,39 +16,73 @@ import { Make } from '../model/makes';
 })
 
 export class VeichleFormComponent implements OnInit {
-  makes: Make[];
-  models: Model[];
-  modelsEmptyFake: Model[];
-  features: Feature[];
-  makeId: number;
-  modelId: number;
-  isRegistred: Boolean;
-  veichle: any = {
+  makes: any[];
+  models: any[];
+  modelsEmptyFake: any[];
+  features: any[];
+  veichle: SaveVeichle = {
+    id: 0,
+    makeId: 0,
+    modelId: 0,
+    isRegistred: false,
     features: [],
     contact: {
+      name: '',
+      phone: '',
+      email: ''
     }
   };
 
 
 
   constructor(private makeService: MakeService,
+    private route: ActivatedRoute,
+    private router: Router,
     private modelService: ModelService,
-    private feauterService: FeaturesService
-    ) { }
+    private feauterService: FeaturesService,
+    private veichleService: VeichleService
+  ) {
+    route.params.subscribe(p => {
+      this.veichle.id = +p['id'];
+    });
+  }
 
   ngOnInit() {
-    this.makeService.getMakes().subscribe(res => {
-      this.makes = res;
-    });
+    // tslint:disable-next-line: prefer-const
+    let source = [
+      this.makeService.getMakes(),
+      this.feauterService.getFeatures()
+    ];
+    if (this.veichle.id) {
+      source.push(this.veichleService.getVeichle(this.veichle.id));
+    }
 
-    this.feauterService.getFeatures().subscribe(res => {
-      this.features = res;
-    });
+    forkJoin(source).subscribe(data => {
+      this.makes = data[0];
+      this.features = data[1];
+      if (this.veichle.id) {
+        this.setVeichle(data[2] as any);
+      }
+    },
+      err => {
+        if (err.status === 404) {
+          this.router.navigate(['']);
+        }
+      });
+  }
+
+  private setVeichle(v: Veichle) {
+    this.veichle.id = v.id;
+    this.veichle.makeId = v.make.id;
+    this.veichle.modelId = v.model.id;
+    this.veichle.isRegistred = v.isRegistred;
+    this.veichle.contact = v.contact;
+    this.veichle.features = _.pluck(v.features, 'id');
   }
 
   onMakeChange() {
     this.models = this.modelsEmptyFake;
-    this.modelService.getModelMakes(this.makeId).subscribe(res => {
+    this.modelService.getModelMakes(this.veichle.makeId).subscribe(res => {
       this.models = res;
     });
   }
@@ -57,12 +94,10 @@ export class VeichleFormComponent implements OnInit {
       this.veichle.features.splice(index, 1);
     }
   }
-  submit() {
-    this.makeService.create(this.veichle)
-      .subscribe(x => console.log(x),
-        err => {
 
-        });
+  submit() {
+    this.veichleService.create(this.veichle)
+      .subscribe(x => console.log(x));
   }
 }
 
