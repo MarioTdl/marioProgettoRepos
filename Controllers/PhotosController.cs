@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using marioProgetto.Core;
@@ -8,6 +9,7 @@ using marioProgettoRepos.Core.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace marioProgettoRepos.Controllers
 {
@@ -17,20 +19,36 @@ namespace marioProgettoRepos.Controllers
         private readonly IHostingEnvironment _host;
         private readonly IVehicleRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
-         private readonly  IMapper _mapper;
-        public PhotosController(IHostingEnvironment host, IVehicleRepository repository,IUnitOfWork unitOfWork,IMapper mapper)
+        private readonly IMapper _mapper;
+        private readonly PhotoSettings _options;
+        public PhotosController(IHostingEnvironment host, IVehicleRepository repository,
+         IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options)
         {
+            _options = options.Value;
             _host = host;
             _repository = repository;
-            _unitOfWork=unitOfWork;
-            _mapper=mapper;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         [HttpPost]
-        public async Task<IActionResult> Upload(int vehicleId, IFormFile file ,IMapper mapper)
+        public async Task<IActionResult> Upload([FromRoute]int veichlesId, IFormFile file)
         {
-            var veichle = await _repository.GetVeichle(vehicleId, includeResource: false);
+            var veichle = await _repository.GetVeichle(veichlesId, includeResource: false);
             if (veichle == null)
                 return NotFound();
+
+            if (file == null)
+                return BadRequest("Null FIle");
+
+            if (file.Length == 0)
+                return BadRequest("empty file");
+
+            if (file.Length > _options.MaxBytes)
+                return BadRequest("File troppo grande");
+
+            if (!_options.isSupported(file.FileName))
+                return BadRequest("Invalid extension file");
+
 
             var uploadsFolderPath = Path.Combine(_host.WebRootPath, "uploads");
             //se non e presente la directory la crea
@@ -48,7 +66,7 @@ namespace marioProgettoRepos.Controllers
             veichle.Photos.Add(photo);
             await _unitOfWork.CompleteAsync();
 
-            return Ok(_mapper.Map<Photo,PhotoResource>(photo)); 
+            return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
     }
 }

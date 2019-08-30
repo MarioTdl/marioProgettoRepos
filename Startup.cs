@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
 using marioProgetto.Core;
+using marioProgettoRepos.Core.Models;
 
 namespace marioProgetto
 {
@@ -23,6 +24,7 @@ namespace marioProgetto
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<PhotoSettings>(Configuration.GetSection("PhotoSettings"));
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddDbContext<MarioProgettoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
