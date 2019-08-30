@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using marioProgetto.Controllers.Resource;
 using marioProgetto.Core;
 using marioProgetto.Models;
+using marioProgettoRepos.Controllers.Resource;
+using marioProgettoRepos.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace marioProgetto.Controllers
@@ -20,6 +23,15 @@ namespace marioProgetto.Controllers
             _mapper = mapper;
             _repository = repository;
             _unitOfWork = unitOfWork;
+        }
+
+        [HttpGet]
+        public async Task<QueryResultResource<VeichleResource>> GetVeichles(VeichleQueryResource filterResource)
+        {
+            var filter = _mapper.Map<VeichleQueryResource, VeichleQuery>(filterResource);
+            var queryResult = await _repository.GetVeichles(filter);
+
+            return _mapper.Map<QueryResult<Veichle>, QueryResultResource<VeichleResource>>(queryResult);
         }
 
         [HttpGet("{id}")]

@@ -1,3 +1,6 @@
+import { PaginationComponent } from './shared/pagination/pagination.component';
+
+import { VeichleListComponent } from './veichle-list/veichle-list.component';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -24,7 +27,9 @@ import { VeichleService } from './services/veichle.service';
     HomeComponent,
     CounterComponent,
     FetchDataComponent,
-    VeichleFormComponent
+    VeichleFormComponent,
+    VeichleListComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,6 +41,7 @@ import { VeichleService } from './services/veichle.service';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'veichle/new', component: VeichleFormComponent },
       { path: 'veichle/:id', component: VeichleFormComponent },
+      { path: 'allVeichles', component: VeichleListComponent }
     ])
   ],
   providers: [

@@ -4,6 +4,8 @@ using AutoMapper;
 using marioProgetto.Controllers.Resource;
 using marioProgetto.Models;
 using marioProgetto.Persistence;
+using marioProgettoRepos.Controllers.Resource;
+using marioProgettoRepos.Core.Models;
 
 namespace marioProgetto.Automapper
 {
@@ -14,6 +16,7 @@ namespace marioProgetto.Automapper
         public MappingProfile()
         {
             //mapping domain to api resource
+            CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Make, MakeResource>();
             CreateMap<Make, KeyValuePairResource>();
             CreateMap<Model, KeyValuePairResource>();
@@ -24,14 +27,15 @@ namespace marioProgetto.Automapper
             new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
             .ForMember(v => v.Features, opt => opt.MapFrom(v => v.Features.Select(p => p.FeatureId)));
             CreateMap<Veichle, VeichleResource>()
-            .ForMember(vr=> vr.Make,opt=> opt.MapFrom(v=>v.Model.Make))
+            .ForMember(vr => vr.Make, opt => opt.MapFrom(v => v.Model.Make))
             .ForMember(vr => vr.Contact,
             opt => opt.MapFrom(v =>
             new ContactResource { Name = v.ContactName, Email = v.ContactEmail, Phone = v.ContactPhone }))
-            .ForMember(v => v.Features, opt => opt.MapFrom(v => v.Features.Select(p => new KeyValuePairResource{Id=p.Feature.Id,Name=p.Feature.Name})));
+            .ForMember(v => v.Features, opt => opt.MapFrom(v => v.Features.Select(p => new KeyValuePairResource { Id = p.Feature.Id, Name = p.Feature.Name })));
 
 
             //mapping api resource to domain
+            CreateMap<VeichleQueryResource, VeichleQuery>();
             CreateMap<SaveVehicleResource, Veichle>()
             .ForMember(v => v.Id, opt => opt.Ignore())
             .ForMember(v => v.ContactName, opt => opt.MapFrom(v => v.Contact.Name))
@@ -55,7 +59,7 @@ namespace marioProgetto.Automapper
                 .Select(id => new VeichleFeature { FeatureId = id });
 
                 foreach (var f in addFeatures)
-                {   
+                {
                     v.Features.Add(f);
                 }
             });

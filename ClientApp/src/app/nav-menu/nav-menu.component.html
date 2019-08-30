@@ -20,6 +20,9 @@
           <li class="nav-item" [routerLinkActive]='["link-active"]'>
             <a class="nav-link text-dark" [routerLink]='["/veichle/new"]'>New Veichle</a>
           </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" [routerLinkActiveOptions]="{exact: true}">
+            <a class="nav-link text-dark" [routerLink]="['/allVeichles']">Vehicles</a>
+        </li>
         </ul>
       </div>
     </div>
