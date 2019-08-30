@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using marioProgettoRepos.Core.Models;
 
 namespace marioProgetto.Models
 {
@@ -23,10 +24,12 @@ namespace marioProgetto.Models
         public string ContactPhone { get; set; }
         public DateTime LastUpdate { get; set; }
         public ICollection<VeichleFeature> Features { get; set; }
+        public ICollection<Photo> Photos { get; set; }
 
         public Veichle()
         {
             Features = new Collection<VeichleFeature>();
+            Photos = new Collection<Photo>();
         }
     }
 }

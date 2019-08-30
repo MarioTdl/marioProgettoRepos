@@ -20,6 +20,7 @@ export class VeichleFormComponent implements OnInit {
   models: any[];
   modelsEmptyFake: any[];
   features: any[];
+  veichleCreateOrUpdate: SaveVeichle;
   veichle: SaveVeichle = {
     id: 0,
     makeId: 0,
@@ -98,11 +99,12 @@ export class VeichleFormComponent implements OnInit {
   }
 
   submit() {
-    if (this.veichle.id) {
-      this.veichleService.update(this.veichle).subscribe(x => console.log(x));
-    }
-    this.veichleService.create(this.veichle)
-      .subscribe(x => console.log(x));
+    const result$ = (this.veichle.id) ? this.veichleService.update(this.veichle) : this.veichleService.create(this.veichle);
+    result$.subscribe(veichle => {
+      this.veichleCreateOrUpdate = veichle as SaveVeichle;
+      this.router.navigate(['/vehicles/', this.veichleCreateOrUpdate.id]);
+    });
+
   }
   delete() {
     if (confirm('Sei sicuro?')) {

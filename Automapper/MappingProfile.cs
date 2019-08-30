@@ -16,6 +16,7 @@ namespace marioProgetto.Automapper
         public MappingProfile()
         {
             //mapping domain to api resource
+            CreateMap<Photo, PhotoResource>();
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Make, MakeResource>();
             CreateMap<Make, KeyValuePairResource>();

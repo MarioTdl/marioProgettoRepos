@@ -14,21 +14,21 @@ export class VeichleService {
     return this.http.post(this.veichleEndpoint, veichle);
   }
   getVeichle(id) {
-    return this.http.get<any>(this.veichleEndpoint + id);
+    return this.http.get<any>(this.veichleEndpoint + '/' + id);
   }
   update(vehicle: SaveVeichle) {
-    return this.http.put(this.veichleEndpoint + vehicle.id, vehicle);
+    return this.http.put(this.veichleEndpoint + '/' + vehicle.id, vehicle);
   }
   delete(id) {
-    return this.http.delete(this.veichleEndpoint + id);
+    return this.http.delete(this.veichleEndpoint + '/' + id);
   }
   getVeichles(filter) {
     return this.http.get<Veichle[]>(this.veichleEndpoint + '?' + this.toQueryString(filter));
   }
   toQueryString(obj) {
-    let parts = [];
+    const parts = [];
     for (let p in obj) {
-      var value = obj[p];
+      let value = obj[p];
       if (value != null && value != undefined) {
         parts.push(encodeURIComponent(p) + '=' + encodeURIComponent(value));
       }
