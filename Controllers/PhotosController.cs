@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using marioProgetto.Core;
 using marioProgettoRepos.Controllers.Resource;
+using marioProgettoRepos.Core;
 using marioProgettoRepos.Core.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,9 +23,12 @@ namespace marioProgettoRepos.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly PhotoSettings _options;
+        private readonly IPhotoRepository _photoRepository;
+
         public PhotosController(IHostingEnvironment host, IVehicleRepository repository,
-         IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options)
+         IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options, IPhotoRepository photoRepository)
         {
+            _photoRepository = photoRepository;
             _options = options.Value;
             _host = host;
             _repository = repository;
@@ -68,5 +73,12 @@ namespace marioProgettoRepos.Controllers
 
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
+        public async Task<IEnumerable<PhotoResource>> GetPhotos(int vehicleId)
+        {
+            var photos = await _photoRepository.GetPhotos(vehicleId);
+            return _mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
+        }
     }
+
+
 }

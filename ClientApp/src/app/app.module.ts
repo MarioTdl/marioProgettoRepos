@@ -1,3 +1,4 @@
+import { PhotoService } from './services/photo.service';
 import { ViewVeichleComponent } from './view-veichle/view-veichle.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
 
@@ -53,6 +54,7 @@ import { VeichleService } from './services/veichle.service';
     ModelService,
     FeaturesService,
     VeichleService,
+    PhotoService,
     { provide: ErrorEvent, useClass: AppErroHandler }
   ],
   bootstrap: [AppComponent]

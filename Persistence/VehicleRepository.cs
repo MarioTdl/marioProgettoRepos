@@ -47,7 +47,6 @@ namespace marioProgetto.Persistence
             return result;
 
         }
-
         public async Task<Veichle> GetVeichle(int id, bool includeResource = true)
         {
             if (!includeResource)
