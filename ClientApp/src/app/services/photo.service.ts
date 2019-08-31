@@ -15,4 +15,5 @@ export class PhotoService {
   getPhotos(veichleId) {
     return this.htpp.get<Photo[]>('/api/vehicles/' + veichleId + '/photos');
   }
+  
 }

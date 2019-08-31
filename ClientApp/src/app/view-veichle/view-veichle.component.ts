@@ -1,5 +1,6 @@
+import { ProgressService } from './../services/progress.service';
 import { VeichleService } from './../services/veichle.service';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../services/photo.service';
 import { Photo } from '../model/Photo';
@@ -13,12 +14,15 @@ export class ViewVeichleComponent implements OnInit {
   vehicleId: number;
   @ViewChild('fileInput') fileInput: ElementRef;
   photos: Photo[];
+  progress: any;
 
   constructor(
+    private zone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
     private photoService: PhotoService,
-    private vehicleService: VeichleService) {
+    private vehicleService: VeichleService,
+    private progressService: ProgressService) {
 
     route.params.subscribe(p => {
       this.vehicleId = +p['id'];
@@ -54,6 +58,14 @@ export class ViewVeichleComponent implements OnInit {
   }
   uploadPhoto() {
     const nativeHelement: HTMLInputElement = this.fileInput.nativeElement;
+
+    this.progressService.startTracking().subscribe(progress => {
+      console.log(progress);
+      this.zone.run(() => {
+        this.progress = progress;
+      });
+    }, null, () => { this.progress = null; });
+
     this.photoService.upload(this.vehicleId, nativeHelement.files[0]).subscribe(p => this.photos.push(p));
   }
 }

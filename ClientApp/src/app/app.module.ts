@@ -1,3 +1,4 @@
+import { BrowserXhr } from '@angular/common/http/src/xhr';
 import { PhotoService } from './services/photo.service';
 import { ViewVeichleComponent } from './view-veichle/view-veichle.component';
 import { PaginationComponent } from './shared/pagination/pagination.component';
@@ -21,6 +22,7 @@ import { ModelService } from './services/model.service';
 import { FeaturesService } from './services/features.service';
 import { AppErroHandler } from './app-error-handler';
 import { VeichleService } from './services/veichle.service';
+import { CustomBrowerXhrWithProgress, ProgressService } from './services/progress.service';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { VeichleService } from './services/veichle.service';
     FeaturesService,
     VeichleService,
     PhotoService,
-    { provide: ErrorEvent, useClass: AppErroHandler }
+    { provide: ErrorEvent, useClass: AppErroHandler },
+    { provide: BrowserXhr, useClass: CustomBrowerXhrWithProgress },
+    ProgressService
   ],
   bootstrap: [AppComponent]
 })
