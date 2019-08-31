@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,10 +74,18 @@ namespace marioProgettoRepos.Controllers
 
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
-        public async Task<IEnumerable<PhotoResource>> GetPhotos([FromRoute]int vehicleId)
+        public async Task<IEnumerable<PhotoResource>> GetPhotos(int veichlesId)
         {
-            var photos = await _photoRepository.GetPhotos(vehicleId);
-            return _mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
+            var photos = await _photoRepository.GetPhotos(veichlesId);
+
+            List<PhotoResource> photoReturn = new List<PhotoResource>();
+            foreach (var photo in photos)
+            {
+                var variable = _mapper.Map<Photo, PhotoResource>(photo);
+                photoReturn.Add(variable);
+            }
+
+            return photoReturn;
         }
     }
 

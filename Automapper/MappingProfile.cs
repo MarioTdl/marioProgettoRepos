@@ -16,7 +16,6 @@ namespace marioProgetto.Automapper
         public MappingProfile()
         {
             //mapping domain to api resource
-            CreateMap<IEnumerable<Photo>, IEnumerable<PhotoResource>>();
             CreateMap<Photo, PhotoResource>();
             CreateMap(typeof(QueryResult<>), typeof(QueryResultResource<>));
             CreateMap<Make, MakeResource>();
@@ -38,6 +37,8 @@ namespace marioProgetto.Automapper
 
             //mapping api resource to domain
             CreateMap<VeichleQueryResource, VeichleQuery>();
+              CreateMap<PhotoResource,Photo>();
+            CreateMap<IEnumerable<PhotoResource>,IEnumerable<Photo>>();
             CreateMap<SaveVehicleResource, Veichle>()
             .ForMember(v => v.Id, opt => opt.Ignore())
             .ForMember(v => v.ContactName, opt => opt.MapFrom(v => v.Contact.Name))

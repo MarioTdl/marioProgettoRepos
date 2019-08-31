@@ -1,5 +1,5 @@
 export interface Photo {
   id: number;
   fileName: string;
-  vehileId: number;
+  veichleId: number;
 }

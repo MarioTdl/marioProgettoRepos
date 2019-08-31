@@ -6,7 +6,6 @@ import { Photo } from '../model/Photo';
 export class PhotoService {
 
   constructor(private htpp: HttpClient) { }
-
   upload(veichleId, photo) {
     const formData = new FormData();
     formData.append('file', photo);
@@ -15,5 +14,4 @@ export class PhotoService {
   getPhotos(veichleId) {
     return this.htpp.get<Photo[]>('/api/vehicles/' + veichleId + '/photos');
   }
-  
 }

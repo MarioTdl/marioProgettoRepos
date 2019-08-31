@@ -17,7 +17,7 @@ namespace marioProgettoRepos.Persistence
         }
         public async Task<IEnumerable<Photo>> GetPhotos(int veichleId)
         {
-            return await _context.Photos.Where(x=> x.VeichleId==veichleId).ToListAsync();
-      }
+            return await _context.Photos.Where(x => x.VeichleId == veichleId).ToListAsync();
+        }
     }
 }

@@ -34,8 +34,9 @@ export class ViewVeichleComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.photoService.getPhotos(this.vehicleId)
-      .subscribe(photos => this.photos = photos);
+    this.photoService.getPhotos(this.vehicleId).subscribe(photos => {
+      this.photos = photos;
+    });
 
     this.vehicleService.getVeichle(this.vehicleId)
       .subscribe(
@@ -57,8 +58,6 @@ export class ViewVeichleComponent implements OnInit {
     }
   }
   uploadPhoto() {
-    const nativeHelement: HTMLInputElement = this.fileInput.nativeElement;
-
     this.progressService.startTracking().subscribe(progress => {
       console.log(progress);
       this.zone.run(() => {
@@ -66,6 +65,9 @@ export class ViewVeichleComponent implements OnInit {
       });
     }, null, () => { this.progress = null; });
 
-    this.photoService.upload(this.vehicleId, nativeHelement.files[0]).subscribe(p => this.photos.push(p));
+    const nativeHelement: HTMLInputElement = this.fileInput.nativeElement;
+    const file = nativeHelement.files[0];
+    nativeHelement.value = '';
+    this.photoService.upload(this.vehicleId, file).subscribe(p => this.photos.push(p));
   }
 }
