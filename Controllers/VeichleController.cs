@@ -7,6 +7,7 @@ using marioProgetto.Core;
 using marioProgetto.Models;
 using marioProgettoRepos.Controllers.Resource;
 using marioProgettoRepos.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace marioProgetto.Controllers
@@ -35,6 +36,7 @@ namespace marioProgetto.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<IActionResult> GetVehicle(int id)
         {
             var vehicle = await _repository.GetVeichle(id);
@@ -47,6 +49,7 @@ namespace marioProgetto.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateVeichle([FromBody] SaveVehicleResource veichleResource)
         {
             if (!ModelState.IsValid)
@@ -74,6 +77,7 @@ namespace marioProgetto.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateVeichle(int id, [FromBody] SaveVehicleResource veichleResource)
         {
             if (!ModelState.IsValid)
@@ -96,6 +100,7 @@ namespace marioProgetto.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
             var vehicle = await _repository.GetVeichle(id, includeResource: false);

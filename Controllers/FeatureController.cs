@@ -4,6 +4,7 @@ using AutoMapper;
 using marioProgetto.Controllers.Resource;
 using marioProgetto.Models;
 using marioProgetto.Persistence;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

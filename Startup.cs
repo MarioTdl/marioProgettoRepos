@@ -11,6 +11,7 @@ using marioProgetto.Core;
 using marioProgettoRepos.Core.Models;
 using marioProgettoRepos.Persistence;
 using marioProgettoRepos.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace marioProgetto
 {
@@ -33,6 +34,15 @@ namespace marioProgetto
             services.AddDbContext<MarioProgettoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = "https://dev-wv1uzw7p.auth0.com/";
+            options.Audience = "https://api.vega.com";
+        });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -59,6 +69,8 @@ namespace marioProgetto
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             db.Database.Migrate();
+             app.UseAuthentication();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
