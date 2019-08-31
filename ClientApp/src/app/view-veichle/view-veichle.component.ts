@@ -2,6 +2,7 @@ import { VeichleService } from './../services/veichle.service';
 import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PhotoService } from '../services/photo.service';
+import { Photo } from '../model/Photo';
 
 @Component({
   selector: 'app-view-veichle',
@@ -11,6 +12,7 @@ export class ViewVeichleComponent implements OnInit {
   vehicle: any;
   vehicleId: number;
   @ViewChild('fileInput') fileInput: ElementRef;
+  photos: Photo[];
 
   constructor(
     private route: ActivatedRoute,
@@ -28,6 +30,9 @@ export class ViewVeichleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.photoService.getPhotos(this.vehicleId)
+      .subscribe(photos => this.photos = photos);
+
     this.vehicleService.getVeichle(this.vehicleId)
       .subscribe(
         v => this.vehicle = v,
@@ -49,6 +54,6 @@ export class ViewVeichleComponent implements OnInit {
   }
   uploadPhoto() {
     const nativeHelement: HTMLInputElement = this.fileInput.nativeElement;
-    this.photoService.upload(this.vehicleId, nativeHelement.files[0]);
+    this.photoService.upload(this.vehicleId, nativeHelement.files[0]).subscribe(p => this.photos.push(p));
   }
 }

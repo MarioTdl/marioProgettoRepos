@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using marioProgetto.Persistence;
@@ -16,7 +17,7 @@ namespace marioProgettoRepos.Persistence
         }
         public async Task<IEnumerable<Photo>> GetPhotos(int veichleId)
         {
-            return await _context.Photos.
+            return await _context.Photos.Where(x=> x.VeichleId==veichleId).ToListAsync();
       }
     }
 }

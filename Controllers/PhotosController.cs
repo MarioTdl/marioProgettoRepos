@@ -73,7 +73,7 @@ namespace marioProgettoRepos.Controllers
 
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }
-        public async Task<IEnumerable<PhotoResource>> GetPhotos(int vehicleId)
+        public async Task<IEnumerable<PhotoResource>> GetPhotos([FromRoute]int vehicleId)
         {
             var photos = await _photoRepository.GetPhotos(vehicleId);
             return _mapper.Map<IEnumerable<Photo>, IEnumerable<PhotoResource>>(photos);
