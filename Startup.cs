@@ -31,6 +31,8 @@ namespace marioProgetto
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IPhotoRepository, PhotoRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IPhotoService, PhotoService>();
+            services.AddTransient<IPhotoService, PhotoService>();
             services.AddDbContext<MarioProgettoDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddAutoMapper(typeof(Startup));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -69,7 +71,7 @@ namespace marioProgetto
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             db.Database.Migrate();
-             app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

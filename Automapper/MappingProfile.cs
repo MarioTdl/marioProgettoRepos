@@ -37,8 +37,8 @@ namespace marioProgetto.Automapper
 
             //mapping api resource to domain
             CreateMap<VeichleQueryResource, VeichleQuery>();
-              CreateMap<PhotoResource,Photo>();
-            CreateMap<IEnumerable<PhotoResource>,IEnumerable<Photo>>();
+            CreateMap<PhotoResource, Photo>();
+            CreateMap<IEnumerable<PhotoResource>, IEnumerable<Photo>>();
             CreateMap<SaveVehicleResource, Veichle>()
             .ForMember(v => v.Id, opt => opt.Ignore())
             .ForMember(v => v.ContactName, opt => opt.MapFrom(v => v.Contact.Name))

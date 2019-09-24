@@ -9,6 +9,17 @@ namespace marioProgettoRepos.Extensions
 {
     public static class IQueryableExtensions
     {
+        public static IQueryable<Veichle> ApplyFiltering(this IQueryable<Veichle> query, VeichleQuery queyObj)
+        {
+            if (queyObj.MakeId.HasValue)
+                query = query.Where(v => v.Model.MakeId == queyObj.MakeId.Value);
+            if (queyObj.ModelId.HasValue)
+                query = query.Where(v => v.ModelId == queyObj.ModelId.Value);
+
+            return query;
+        }
+
+
         public static IQueryable<T> ApplyOrding<T>(this IQueryable<T> query, IQueryObject queryObj, Dictionary<string, Expression<Func<T, object>>> columsMap)
         {
             if (String.IsNullOrEmpty(queryObj.SortBy) || !columsMap.ContainsKey(queryObj.SortBy))

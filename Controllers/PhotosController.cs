@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+
 using System.IO;
-using System.Linq;
+
 using System.Threading.Tasks;
 using AutoMapper;
 using marioProgetto.Core;
@@ -21,20 +21,20 @@ namespace marioProgettoRepos.Controllers
     {
         private readonly IHostingEnvironment _host;
         private readonly IVehicleRepository _repository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly PhotoSettings _options;
         private readonly IPhotoRepository _photoRepository;
-
+        private readonly IPhotoService _photoService;
         public PhotosController(IHostingEnvironment host, IVehicleRepository repository,
-         IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options, IPhotoRepository photoRepository)
+         IUnitOfWork unitOfWork, IMapper mapper, IOptionsSnapshot<PhotoSettings> options,
+          IPhotoRepository photoRepository, IPhotoService photoService)
         {
             _photoRepository = photoRepository;
             _options = options.Value;
             _host = host;
             _repository = repository;
-            _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _photoService = photoService;
         }
         [HttpPost]
         public async Task<IActionResult> Upload([FromRoute]int veichlesId, IFormFile file)
@@ -55,22 +55,9 @@ namespace marioProgettoRepos.Controllers
             if (!_options.isSupported(file.FileName))
                 return BadRequest("Invalid extension file");
 
-
             var uploadsFolderPath = Path.Combine(_host.WebRootPath, "uploads");
-            //se non e presente la directory la crea
-            if (!Directory.Exists(uploadsFolderPath))
-                Directory.CreateDirectory(uploadsFolderPath);
 
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-            var filePath = Path.Combine(uploadsFolderPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            var photo = new Photo { FileName = fileName };
-            veichle.Photos.Add(photo);
-            await _unitOfWork.CompleteAsync();
+            var photo = await _photoService.UploadPhoto(veichle, file, uploadsFolderPath);
 
             return Ok(_mapper.Map<Photo, PhotoResource>(photo));
         }

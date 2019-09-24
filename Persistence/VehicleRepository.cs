@@ -25,8 +25,6 @@ namespace marioProgetto.Persistence
             var query = _context.Veichles
             .Include(v => v.Model)
             .ThenInclude(v => v.Make)
-            .Include(v => v.Features)
-            .ThenInclude(v => v.Feature)
             .AsQueryable();
 
             var columsMap = new Dictionary<string, Expression<Func<Veichle, object>>>()
@@ -36,6 +34,8 @@ namespace marioProgetto.Persistence
                 ["contactName"] = v => v.ContactName,
             };
 
+            query = query.ApplyFiltering(queryObj);
+            
             query = query.ApplyOrding(queryObj, columsMap);
 
             result.TotalItems = await query.CountAsync();
